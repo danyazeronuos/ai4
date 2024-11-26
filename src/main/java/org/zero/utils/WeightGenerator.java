@@ -3,7 +3,7 @@ package org.zero.utils;
 import java.util.function.Function;
 
 public class WeightGenerator implements Function<Integer, double[]> {
-    private static double min = 0;
+    private static double min = -1;
     private static double max = 1;
     @Override
     public double[] apply(Integer weights) {

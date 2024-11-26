@@ -4,6 +4,9 @@ import org.zero.model.Error;
 import org.zero.model.ErrorStrategy;
 import org.zero.utils.Layer;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 public class Sequential {
     private final Error error;
     private Layer lastLayer = null;
@@ -35,9 +38,9 @@ public class Sequential {
     public void learn(double[] prediction, double[] target) {
         if (prediction.length != target.length) return;
         var error = this.error.calculate(prediction, target);
-        if (Math.abs(error) < 0.000001) return;
-        var e = new double[1];
-        e[0] = error;
-       lastLayer.learn(e);
+        System.out.println(Arrays.toString(error));
+
+
+       lastLayer.learn(error);
     }
 }

@@ -32,9 +32,11 @@ public class Neuron {
         double gradient = e; // Remove multiplication by activation derivative here.
         double[] weightUpdates = new double[weightArray.length];
 
+//        System.out.println(e);
         for (int i = 0; i < weightArray.length; i++) {
             weightUpdates[i] = gradient * weightArray[i];
             weightArray[i] -= this.a * gradient * x[i]; // Update weights using input gradient.
+//            System.out.println(weightArray[i]);
         }
 
         return weightUpdates;
