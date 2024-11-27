@@ -38,15 +38,15 @@ public class Main {
                 {30.0},
         };
 
-        PrepareLearningSet prepare = new PrepareLearningSet();
-        var dataset = prepare.apply(200);
+        PrepareLearningSet prepare = new PrepareLearningSet(5, 7);
+        var dataset = prepare.apply(200, 0);
 
         var ai = new Sequential(ErrorStrategy.MSE);
         ai.addLayer(new Layer("Layer-1", 169, 785, PropagationStrategy.RELU, a));
         ai.addLayer(new Layer("Layer-3", 2, 169, PropagationStrategy.SIGMOID, a));
 
         var fit = new FitBinaryIntArray();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 500; i++) {
             for (int j = 0; j < dataset.matrixs().length; j++) {
 
                 var res = ai.predict(fit.apply(dataset.matrixs()[j]));
@@ -56,18 +56,18 @@ public class Main {
         }
 
         System.out.println(dataset.answers().length);
-        double[] predict = ai.predict(fit.apply(dataset.matrixs()[3]));
-        System.out.println();
-        System.out.printf("5(0, 1) 7(1, 0) -> %.2f, %.2f", predict[0], predict[1]);
+      PrepareLearningSet prepareTest = new PrepareLearningSet(5, 7);
+        var testDataset = prepareTest.apply(200, 200);
+        System.out.println(testDataset.answers().length);
 
         var sc = new Scanner(System.in);
         while (true) {
             System.out.println();
             System.out.print("Enter -> ");
             var id = sc.nextInt();
-            predict = ai.predict(fit.apply(dataset.matrixs()[id]));
+            var predict = ai.predict(fit.apply(testDataset.matrixs()[id]));
             System.out.println();
-            System.out.printf("%s -> %.2f, %.2f", Arrays.toString(dataset.answers()[id]), predict[0], predict[1]);
+            System.out.printf("%s -> %.2f, %.2f", Arrays.toString(testDataset.answers()[id]), predict[0], predict[1]);
         }
     }
 }

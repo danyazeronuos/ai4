@@ -2,34 +2,73 @@ package org.zero.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class PrepareLearningSet implements Function<Integer, PrepareLearningSet.Pair> {
+public class PrepareLearningSet implements BiFunction<Integer, Integer, PrepareLearningSet.Pair> {
+    private int[] numbers;
 
-    @Override
-    public Pair apply(Integer imagesCount) {
-        ExtractLearningSet extract = new ExtractLearningSet();
-        var extracted = extract.apply(imagesCount);
-
-        var fiveMatrixList = new ArrayList<int[]>();
-        var sevenMatrixList = new ArrayList<int[]>();
-        for (int i = 0; i < extracted.a().length; i++) {
-            if (extracted.a()[i] == 5) fiveMatrixList.add(extracted.images()[i]);
-            if (extracted.a()[i] == 7) sevenMatrixList.add(extracted.images()[i]);
-        }
-        var arr = Stream.of(fiveMatrixList, sevenMatrixList).flatMap(Collection::stream).toArray(int[][]::new);
-        var answers = new double[arr.length][2];
-        var first = new double[]{0, 1};
-        var second = new double[]{1, 0};
-
-        for (int i = 0; i < arr.length; i++) {
-            if (i < fiveMatrixList.size()) answers[i] = first;
-            else answers[i] = second;
-        }
-
-        return new Pair(arr, answers);
+    public PrepareLearningSet(int... numbers) {
+        this.numbers = numbers;
     }
 
-    public record Pair(int[][] matrixs, double[][] answers){};
+    @Override
+    public Pair apply(Integer limit, Integer offset) {
+        ExtractLearningSet extract = new ExtractLearningSet();
+        var extracted = extract.apply(limit, offset);
+        System.out.println("extracted: " + extracted.images().length);
+        var categoryArray = this.getAllCategoryMarkArray(this.numbers);
+
+        var elementsList = new ArrayList<Picture>();
+        for (int number : this.numbers) {
+            for (int j = 0; j < extracted.a().length; j++) {
+                if (extracted.a()[j] != number) continue;
+
+                var picture = new Picture(extracted.a()[j], extracted.images()[j]);
+                elementsList.add(picture);
+            }
+        }
+        System.out.println("Found " + elementsList.size() + " elements");
+        Collections.shuffle(elementsList);
+
+        var imageArray = elementsList.stream().map(Picture::image).toArray(int[][]::new);
+
+        double[][] labelArray = new double[imageArray.length][this.numbers.length];
+        for (int i = 0; i < numbers.length; i++) {
+            for (int j = 0; j < elementsList.size(); j++) {
+                if (elementsList.get(j).label() != this.numbers[i]) continue;
+
+                labelArray[j] = categoryArray[i];
+            }
+        }
+
+
+        return new Pair(imageArray, labelArray);
+    }
+
+    public double[][] getAllCategoryMarkArray(int[] numbers) {
+        var categoryArray = new double[numbers.length][numbers.length];
+        for (int i = 0; i < numbers.length; i++) {
+            categoryArray[i] = this.getCategoryMark(i, numbers.length);
+        }
+        return categoryArray;
+    }
+
+    public double[] getCategoryMark(int index, int length) {
+        var mark = new double[length];
+        mark[index] = 1;
+        return mark;
+    }
+
+    public record Picture(int label, int[] image) {
+    }
+
+    ;
+
+    public record Pair(int[][] matrixs, double[][] answers) {
+    }
+
+    ;
 }
