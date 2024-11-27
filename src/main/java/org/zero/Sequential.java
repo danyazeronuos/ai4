@@ -38,7 +38,7 @@ public class Sequential {
     public void learn(double[] prediction, double[] target) {
         if (prediction.length != target.length) return;
         var error = this.error.calculate(prediction, target);
-        System.out.println(Arrays.toString(error));
+//        System.out.println(Arrays.toString(error));
 
 
        lastLayer.learn(error);
