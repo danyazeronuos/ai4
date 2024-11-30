@@ -1,8 +1,8 @@
-package org.zero.model;
+package org.zero.lib.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.zero.utils.MSE;
+import org.zero.lib.utils.MSE;
 
 @Getter
 @RequiredArgsConstructor

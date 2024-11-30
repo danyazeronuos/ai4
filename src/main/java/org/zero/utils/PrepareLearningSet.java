@@ -1,15 +1,12 @@
 package org.zero.utils;
 
-import lombok.Getter;
+import org.zero.lib.model.Dataset;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
-public class PrepareLearningSet implements BiFunction<Integer, Integer, PrepareLearningSet.Pair> {
+public class PrepareLearningSet implements BiFunction<Integer, Integer, Dataset> {
     private final double[] numbers;
 
     public double[] getNumbers() {
@@ -22,7 +19,7 @@ public class PrepareLearningSet implements BiFunction<Integer, Integer, PrepareL
     }
 
     @Override
-    public Pair apply(Integer limit, Integer offset) {
+    public Dataset apply(Integer limit, Integer offset) {
         ExtractLearningSet extract = new ExtractLearningSet();
         var extracted = extract.apply(limit, offset);
         var categoryArray = this.getAllCategoryMarkArray(this.numbers);
@@ -38,7 +35,13 @@ public class PrepareLearningSet implements BiFunction<Integer, Integer, PrepareL
         }
         Collections.shuffle(elementsList);
 
-        var imageArray = elementsList.stream().map(Picture::image).toArray(int[][]::new);
+        var imageArray = elementsList.stream().map(Picture::image).map(element -> {
+            var newArr = new double[element.length];
+            for (int i = 0; i < element.length; i++) {
+                newArr[i] = element[i];
+            }
+            return newArr;
+        }).toArray(double[][]::new);
 
         double[][] labelArray = new double[imageArray.length][this.numbers.length];
         for (int i = 0; i < numbers.length; i++) {
@@ -50,7 +53,7 @@ public class PrepareLearningSet implements BiFunction<Integer, Integer, PrepareL
         }
 
 
-        return new Pair(imageArray, labelArray);
+        return new Dataset(imageArray, labelArray);
     }
 
     public double[][] getAllCategoryMarkArray(double[] numbers) {
@@ -67,13 +70,5 @@ public class PrepareLearningSet implements BiFunction<Integer, Integer, PrepareL
         return mark;
     }
 
-    public record Picture(int label, int[] image) {
-    }
-
-    ;
-
-    public record Pair(int[][] matrixs, double[][] answers) {
-    }
-
-    ;
+    public record Picture(int label, int[] image) {};
 }

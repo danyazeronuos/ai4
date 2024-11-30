@@ -1,4 +1,4 @@
-package org.zero.model;
+package org.zero.lib.model;
 
 public interface Activation {
     double activate(double x);

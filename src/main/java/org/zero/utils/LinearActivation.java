@@ -1,6 +1,6 @@
 package org.zero.utils;
 
-import org.zero.model.Activation;
+import org.zero.lib.model.Activation;
 
 public class LinearActivation implements Activation {
     @Override

@@ -1,23 +1,27 @@
-package org.zero.utils;
+package org.zero.lib;
 
-import lombok.RequiredArgsConstructor;
-import org.zero.model.Activation;
+import org.zero.lib.utils.WeightGenerator;
+import org.zero.lib.model.Activation;
 
-import java.util.Arrays;
 import java.util.function.IntToDoubleFunction;
 import java.util.stream.IntStream;
 
 public class Neuron {
-    private double a;
-    private double[] weightArray;
+    private final double a;
+    private final double[] weightArray;
     private final Activation activation;
 
-    public Neuron(Activation activation, Integer inputs, double a) {
+    public Neuron(
+            Activation activation,
+            int inputs,
+            double a,
+            double minWeight,
+            double maxWeight
+    ) {
         this.activation = activation;
         this.a = a;
 
-        var weightGenerator = new WeightGenerator();
-        weightArray = weightGenerator.apply(inputs);
+        weightArray = WeightGenerator.getInstance().apply(inputs, minWeight, maxWeight);
     }
 
     public Double apply(double[] inputArray) {
@@ -29,14 +33,11 @@ public class Neuron {
     }
 
     public double[] learn(double e, double[] x) {
-        double gradient = e; // Remove multiplication by activation derivative here.
         double[] weightUpdates = new double[weightArray.length];
 
-//        System.out.println(e);
         for (int i = 0; i < weightArray.length; i++) {
-            weightUpdates[i] = gradient * weightArray[i];
-            weightArray[i] -= this.a * gradient * x[i]; // Update weights using input gradient.
-//            System.out.println(weightArray[i]);
+            weightUpdates[i] = e * weightArray[i];
+            weightArray[i] -= this.a * e * x[i];
         }
 
         return weightUpdates;

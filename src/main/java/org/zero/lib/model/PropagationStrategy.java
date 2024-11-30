@@ -1,10 +1,10 @@
-package org.zero.model;
+package org.zero.lib.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.zero.utils.LinearActivation;
-import org.zero.utils.RELUActivation;
-import org.zero.utils.SigmoidActivation;
+import org.zero.lib.utils.RELUActivation;
+import org.zero.lib.utils.SigmoidActivation;
 
 
 @Getter

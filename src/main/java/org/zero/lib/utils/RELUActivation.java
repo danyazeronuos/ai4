@@ -1,6 +1,6 @@
-package org.zero.utils;
+package org.zero.lib.utils;
 
-import org.zero.model.Activation;
+import org.zero.lib.model.Activation;
 
 public class RELUActivation implements Activation {
     @Override
