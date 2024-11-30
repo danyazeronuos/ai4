@@ -2,6 +2,7 @@ package org.zero.lib;
 
 import org.zero.lib.model.*;
 import org.zero.lib.model.Error;
+import org.zero.lib.utils.WeightGenerator;
 import org.zero.utils.ProgressBar;
 
 import java.util.Arrays;
@@ -10,8 +11,6 @@ public class Net {
     private final Error error;
     private int inputs = 1;
     private final boolean bias;
-    private double minWeight = -1;
-    private double maxWeight = 1;
     private Layer lastLayer = null;
     private Layer firstLayer = null;
 
@@ -21,12 +20,14 @@ public class Net {
     }
 
     public Net minWeight(double minWeight) {
-        this.minWeight = minWeight;
+        WeightGenerator.setMinWeight(minWeight);
+
         return this;
     }
 
     public Net maxWeight(double maxWeight) {
-        this.maxWeight = maxWeight;
+        WeightGenerator.setMaxWeight(maxWeight);
+
         return this;
     }
 
@@ -41,12 +42,12 @@ public class Net {
         if (neurons < 0) throw new AIException("Neurons can't be less than 1");
 
         if (this.lastLayer == null) {
-            var newLayer = new Layer(neurons, this.inputs, strategy, speed, minWeight, maxWeight);
+            var newLayer = new Layer(neurons, this.inputs, strategy, speed);
             this.lastLayer = newLayer;
             this.firstLayer = newLayer;
             return this;
         }
-        var newLayer = new Layer(neurons, this.lastLayer.getNeuronsCount(), strategy, speed, minWeight, maxWeight);
+        var newLayer = new Layer(neurons, this.lastLayer.getNeuronsCount(), strategy, speed);
         this.lastLayer.setChild(newLayer);
         newLayer.setParent(this.lastLayer);
         this.lastLayer = newLayer;

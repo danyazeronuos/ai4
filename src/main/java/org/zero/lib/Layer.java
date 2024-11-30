@@ -21,18 +21,14 @@ public class Layer {
             Integer neurons,
             Integer inputs,
             PropagationStrategy strategy,
-            double learningSpeed,
-            double minWeight,
-            double maxWeight
+            double learningSpeed
     ) {
         this.neurons = new Neuron[neurons];
         for (int i = 0; i < neurons; i++) {
             Neuron newNeuron = new Neuron(
                     strategy.getFunction(),
                     inputs,
-                    learningSpeed,
-                    minWeight,
-                    maxWeight
+                    learningSpeed
             );
             this.neurons[i] = newNeuron;
         }

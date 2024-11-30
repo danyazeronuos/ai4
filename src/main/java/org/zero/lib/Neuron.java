@@ -14,14 +14,12 @@ public class Neuron {
     public Neuron(
             Activation activation,
             int inputs,
-            double a,
-            double minWeight,
-            double maxWeight
+            double a
     ) {
         this.activation = activation;
         this.a = a;
 
-        weightArray = WeightGenerator.getInstance().apply(inputs, minWeight, maxWeight);
+        weightArray = WeightGenerator.getInstance().apply(inputs);
     }
 
     public Double apply(double[] inputArray) {
