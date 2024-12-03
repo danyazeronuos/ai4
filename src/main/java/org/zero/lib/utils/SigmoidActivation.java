@@ -9,7 +9,7 @@ public class SigmoidActivation implements Activation {
     }
 
     @Override
-    public double deactivate(double e, double x) {
-        return e * x * (1 - x);
+    public double deactivate(double x) {
+        return x * (1 - x);
     }
 }

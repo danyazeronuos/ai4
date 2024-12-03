@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Multiplication {
-    private static final double learningSpeed = 0.001;
+    private static final double learningSpeed = 0.01;
     public static void main(String[] args) {
         double[][] data = {
                 {1},
@@ -39,10 +39,10 @@ public class Multiplication {
 
         var ai = new Net(ErrorStrategy.MSE, true)
                 .inputs(1)
-                .minWeight(-1)
-                .maxWeight(1)
+                .minWeight(8)
+                .maxWeight(10)
                 .addLayer(1, PropagationStrategy.RELU, learningSpeed)
-                .learn(dataset, 1000);
+                .learn(dataset, 100);
 
         var sc = new Scanner(System.in);
         while (true) {

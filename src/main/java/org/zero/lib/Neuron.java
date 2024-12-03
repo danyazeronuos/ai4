@@ -30,12 +30,12 @@ public class Neuron {
         return activation.activate(neuronSum);
     }
 
-    public double[] learn(double e, double[] x) {
+    public double[] learn(double e, double[] prevOutput, double value) {
         double[] weightUpdates = new double[weightArray.length];
 
         for (int i = 0; i < weightArray.length; i++) {
             weightUpdates[i] = e * weightArray[i];
-            weightArray[i] -= this.a * e * x[i];
+            weightArray[i] -= this.a * e * this.activation.deactivate(value) * prevOutput[i];
         }
 
         return weightUpdates;

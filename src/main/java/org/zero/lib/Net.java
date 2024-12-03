@@ -96,7 +96,7 @@ public class Net {
     private double[] learn(double[] prediction, double[] target) {
         if (prediction.length != target.length) throw new AIException("Incorrect length of target or prediction");
         var error = this.error.calculate(prediction, target).toArray();
-        lastLayer.learn(error);
+        lastLayer.learn(error, prediction);
         return error;
     }
 }

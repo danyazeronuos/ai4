@@ -6,6 +6,7 @@ import org.zero.lib.model.PropagationStrategy;
 import org.zero.lib.utils.WeightGenerator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Layer {
@@ -50,12 +51,13 @@ public class Layer {
         return predictions;
     }
 
-    public void learn(double[] e) {
+    public double[] learn(double[] e, double[] value) {
         double[] prevGenerationDelta = new double[0];
         for (int i = 0; i < neurons.length; i++) {
-            prevGenerationDelta = neurons[i].learn(e[i], predictions);
+            prevGenerationDelta = neurons[i].learn(e[i], predictions, value[i]);
         }
 
-        if (parent != null) parent.learn(prevGenerationDelta);
+        if (parent != null) parent.learn(prevGenerationDelta, this.predictions);
+        return prevGenerationDelta;
     }
 }

@@ -9,7 +9,7 @@ public class RELUActivation implements Activation {
     }
 
     @Override
-    public double deactivate(double e, double x) {
+    public double deactivate(double x) {
         return x > 0 ? 1 : 0;
     }
 }

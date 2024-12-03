@@ -15,10 +15,10 @@ public class Main {
         var fit = new FitBinaryArray();
         var print = new PrintPicture();
 
-        int firstImages = 1500;
-        var iterations = 300;
+        int firstImages = 800;
+        var iterations = 400;
 
-        PrepareLearningSet prepare = new PrepareLearningSet(5, 7, 2, 0, 4);
+        PrepareLearningSet prepare = new PrepareLearningSet(5, 7, 4, 0, 2);
         var dataset = prepare.apply(firstImages, 0);
 
         for (int i = 0; i < dataset.data().length; i++) {
